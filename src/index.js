@@ -1,3 +1,4 @@
+const { request } = require('express');
 
 const express = require('express');
 
@@ -9,6 +10,7 @@ app.use(express.json());
 
 const customers = [];
 
+
 app.post("/account",(resquest, response) => {
     const {cpf, name} = resquest.body;
     
@@ -19,7 +21,6 @@ app.post("/account",(resquest, response) => {
 
 if (customerAlreadExists) {
     return response.status(400).json({error: "Custumer alread exists!"});
-
 
 }
   
@@ -36,6 +37,13 @@ if (customerAlreadExists) {
 });
 
 
-
-
 app.listen(3333);
+
+
+app.get("/statement/:cpf",(request,response) => {
+    const { cpf } = request.params;
+
+    const customer = customers.find(customer => customer.cpf === cpf);
+    return response.json(customer.statement);
+
+});
