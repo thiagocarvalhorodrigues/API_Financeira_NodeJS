@@ -40,10 +40,17 @@ if (customerAlreadExists) {
 app.listen(3333);
 
 
-app.get("/statement/:cpf",(request,response) => {
-    const { cpf } = request.params;
+app.get("/statement",(request,response) => {
+    const { cpf } = request.headers;
 
-    const customer = customers.find(customer => customer.cpf === cpf);
+    const customer = customers.find((customer) => customer.cpf === cpf);
+    
+    if (!customer) {
+        return response.status(400).json({error: "Customer not found"});
+
+
+    }
+    
     return response.json(customer.statement);
 
 });
